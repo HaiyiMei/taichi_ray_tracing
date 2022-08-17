@@ -133,14 +133,14 @@ if __name__ == "__main__":
     camera_origin = [0., 1., -5.]
     camera_end = [0., 1., 5.]
     camera_step = 10
+
+    render_sample = 10
     # canvas.fill(0)
     cnt = 0
     idx = 0
 
-    f_0d = ti.field(ti.f32, shape=())
-    f_0d[None] = 100.
     while gui.running:
-        if cnt == 100:
+        if cnt == render_sample:
             img = np.sqrt(canvas.to_numpy() / cnt) * 255.
             img = Image.fromarray(img.astype(np.uint8))
             img = img.rotate(90)
@@ -154,8 +154,10 @@ if __name__ == "__main__":
             canvas.fill(0)
             camera_pos = []
             for i in range(3):
-                pos = camera_origin[i] + (camera_end[i] - camera_origin[i]) * (cnt // 100) / camera_step
+                margin = (camera_end[i] - camera_origin[i]) / camera_step * idx
+                pos = camera_origin[i] + margin
                 camera_pos.append(pos)
+            print(camera_pos)
             camera.reset(lookfrom_x=camera_pos[0], lookfrom_y=camera_pos[1], lookfrom_z=camera_pos[2],)
 
         render()
