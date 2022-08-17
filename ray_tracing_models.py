@@ -1,3 +1,4 @@
+from typing import List, Tuple
 import taichi as ti
 
 PI = 3.14159265
@@ -153,11 +154,20 @@ class Camera:
         self.cam_horizontal = ti.Vector.field(3, dtype=ti.f32, shape=())
         self.cam_vertical = ti.Vector.field(3, dtype=ti.f32, shape=())
         self.cam_origin = ti.Vector.field(3, dtype=ti.f32, shape=())
-        self.reset()
+
+        lookfrom = [0.0, 1.0, -5.0]
+        self.reset(lookfrom[0], lookfrom[1], lookfrom[2])
 
     @ti.kernel
-    def reset(self):
-        self.lookfrom[None] = [0.0, 1.0, -5.0]
+    def reset(
+        self,
+        lookfrom_x: float,
+        lookfrom_y: float,
+        lookfrom_z: float,
+        # lookat: float,
+        # vup: float,
+    ):
+        self.lookfrom[None] = [lookfrom_x, lookfrom_y, lookfrom_z]
         self.lookat[None] = [0.0, 1.0, -1.0]
         self.vup[None] = [0.0, 1.0, 0.0]
         theta = self.fov * (PI / 180.0)

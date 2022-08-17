@@ -128,9 +128,21 @@ if __name__ == "__main__":
 
     camera = Camera()
     gui = ti.GUI("Ray Tracing", res=(image_width, image_height))
-    canvas.fill(0)
+
+    camera_origin = [0., 1., -5.]
+    camera_end = [0., 1., 5.]
+    camera_step = 100
+    # canvas.fill(0)
     cnt = 0
     while gui.running:
+        if cnt % 100 == 0:
+            canvas.fill(0)
+            camera_pos = []
+            for i in range(3):
+                pos = camera_origin[i] + (camera_end[i] - camera_origin[i]) * (cnt // 100) / camera_step
+                camera_pos.append(pos)
+            camera.reset(lookfrom_x=camera_pos[0], lookfrom_y=camera_pos[1], lookfrom_z=camera_pos[2],)
+
         render()
         cnt += 1
         gui.set_image(np.sqrt(canvas.to_numpy() / cnt))
