@@ -1,3 +1,4 @@
+from PIL import Image
 import taichi as ti
 import numpy as np
 import argparse
@@ -134,8 +135,18 @@ if __name__ == "__main__":
     camera_step = 100
     # canvas.fill(0)
     cnt = 0
+    idx = 0
     while gui.running:
-        if cnt % 100 == 0:
+        if cnt == 100:
+            img = canvas.to_numpy() / cnt
+            img = Image.fromarray(img.astype(np.uint8))
+            img.save(f'output_{idx}.png')
+
+            cnt = 0
+            idx += 1
+            if idx == camera_step:
+                break
+
             canvas.fill(0)
             camera_pos = []
             for i in range(3):
