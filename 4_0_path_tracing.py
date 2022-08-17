@@ -132,15 +132,19 @@ if __name__ == "__main__":
 
     camera_origin = [0., 1., -5.]
     camera_end = [0., 1., 5.]
-    camera_step = 100
+    camera_step = 10
     # canvas.fill(0)
     cnt = 0
     idx = 0
+
+    f_0d = ti.field(ti.f32, shape=())
+    f_0d[None] = 100.
     while gui.running:
         if cnt == 100:
-            img = canvas.to_numpy() / cnt
+            img = np.sqrt(canvas.to_numpy() / cnt) * 255.
             img = Image.fromarray(img.astype(np.uint8))
-            img.save(f'output_{idx}.png')
+            img = img.rotate(90)
+            img.save(f'output/{idx}.png')
 
             cnt = 0
             idx += 1
